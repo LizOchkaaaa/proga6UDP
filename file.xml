@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<studyGroups>
+    <studyGroup>
+        <id>2</id>
+        <name>euueueu</name>
+        <coordinates>
+            <x>226626.0</x>
+            <y>333</y>
+        </coordinates>
+        <creationDate>2023-03-31T19:31:05.359997700+03:00[Europe/Moscow]</creationDate>
+        <studentsCount>111</studentsCount>
+        <formOfEducation>DISTANCE_EDUCATION</formOfEducation>
+        <semesterEnum>FIRST</semesterEnum>
+        <groupAdmin>
+            <name>fjjfjf</name>
+            <birthday>2009-09-09T00:00+04:00[Europe/Moscow]</birthday>
+            <weight>30303003</weight>
+            <passportID>euueueue</passportID>
+            <hairColor>GREEN</hairColor>
+        </groupAdmin>
+    </studyGroup>
+</studyGroups>

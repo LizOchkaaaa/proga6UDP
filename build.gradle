@@ -1,0 +1,86 @@
+subprojects {
+    apply plugin: 'java'
+    repositories {
+        mavenCentral()
+    }
+}
+
+project(':server') {
+    apply plugin: 'application'
+    mainClassName = 'example.MainServer'
+    dependencies {
+        implementation project(':commons')
+        implementation 'org.jetbrains:annotations:20.1.0'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+        implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.3'
+        implementation 'org.apache.commons:commons-lang3:3.12.0'
+        implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+        implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    }
+
+
+    jar {
+        manifest.attributes(
+                'Main-Class': 'example.MainServer',
+                'Implementation-Title': 'Gradle'
+        )
+        from {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+
+}
+project(':client') {
+    apply plugin: 'application'
+    mainClassName = 'example.MainClient'
+    dependencies {
+        implementation project(':commons')
+        implementation 'org.jetbrains:annotations:20.1.0'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+        implementation 'com.sun.xml.bind:jaxb-impl:2.3.3'
+        implementation 'org.apache.commons:commons-lang3:3.12.0'
+    }
+
+    run {
+        standardInput = System.in
+    }
+    jar {
+        manifest.attributes(
+                'Main-Class': 'example.MainClient',
+                'Implementation-Title': 'Gradle'
+        )
+        from {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+}
+project(":commons"){
+    apply plugin: 'application'
+    dependencies {
+
+        implementation 'com.sun.xml.bind:jaxb-impl:2.3.3'
+    }
+}
+
+allprojects {
+    tasks.register('fatJar', Jar) {
+        archiveClassifier = 'fat'
+
+        from sourceSets.main.output
+        dependsOn configurations.runtimeClasspath
+
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        manifest {
+            attributes['Main-Class'] = application.mainClass
+        }
+
+        from {
+            configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+        }
+    }
+}
